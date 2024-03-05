@@ -1,4 +1,5 @@
 ﻿using AgenziaSpedizioni.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Spedizioni.Data;
 
@@ -12,6 +13,7 @@ namespace AgenziaSpedizioni.Controllers
             _db = db;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             IEnumerable<User> objList = _db.Users;
@@ -40,6 +42,7 @@ namespace AgenziaSpedizioni.Controllers
             return View();
         }
 
+        [Authorize("Admin")]
         public IActionResult Edit(int? id)
         {
             var user = _db.Users.Find(id);
@@ -54,6 +57,7 @@ namespace AgenziaSpedizioni.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin")]
         public IActionResult Edit(User user)
         {
             if (ModelState.IsValid)
@@ -67,6 +71,7 @@ namespace AgenziaSpedizioni.Controllers
             return View();
         }
 
+        [Authorize("Admin")]
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -86,6 +91,7 @@ namespace AgenziaSpedizioni.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize("Admin")]
         public IActionResult DeletePOST(int? id)
         {
             var user = _db.Users.Find(id);
