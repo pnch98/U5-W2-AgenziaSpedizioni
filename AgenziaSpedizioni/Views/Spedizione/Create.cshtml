@@ -1,0 +1,58 @@
+﻿@model AgenziaSpedizioni.Models.Spedizione
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Spedizione</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DataSpedizione" class="control-label"></label>
+                <input type="date" asp-for="DataSpedizione" class="form-control" />
+                <span asp-validation-for="DataSpedizione" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataConsegnaPrevista" class="control-label"></label>
+                <input type="date" asp-for="DataConsegnaPrevista" class="form-control" />
+                <span asp-validation-for="DataConsegnaPrevista" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Peso" class="control-label"></label>
+                <input asp-for="Peso" class="form-control" />
+                <span asp-validation-for="Peso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CittaDestinataria" class="control-label"></label>
+                <input asp-for="CittaDestinataria" class="form-control" />
+                <span asp-validation-for="CittaDestinataria" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Indirizzo" class="control-label"></label>
+                <input asp-for="Indirizzo" class="form-control" />
+                <span asp-validation-for="Indirizzo" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="CostoSpedizione" class="control-label"></label>
+                <input asp-for="CostoSpedizione" class="form-control" />
+                <span asp-validation-for="CostoSpedizione" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

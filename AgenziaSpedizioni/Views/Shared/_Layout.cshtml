@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,23 +12,23 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AgenziaSpedizioni</a>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light navBg border-bottom box-shadow mb-3">
+            <div class="container-fluid py-2">
+                <a class="text-decoration-none fs-4 navLink" asp-area="" asp-controller="Home" asp-action="Index">AgenziaSpedizioni</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between ms-3">
+                    <ul class="d-flex list-unstyled mb-0">
+                        <li class="nav-item navLink">
+                            <a class="nav-link navLink" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @{
                             if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                                    <a class="nav-link navLink" asp-area="" asp-controller="User" asp-action="Index">Users</a>
                                 </li>
                             }
                         }
@@ -35,16 +36,35 @@
                             if (User.Identity.IsAuthenticated)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+                                    <a class="nav-link navLink" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
                                 </li>
                             } else
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Login">Login</a>
+                                    <a class="nav-link navLink" asp-area="" asp-controller="Login" asp-action="Login">Login</a>
                                 </li>
                             }
                         }
                     </ul>
+                    @{
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            var idClaim = User.FindFirst(ClaimTypes.UserData);
+
+                            if (idClaim == null)
+                            {
+                                TempData["error"] = "Qualcosa è andato storto.";
+                            }
+
+                            int? id = Convert.ToInt16(idClaim.Value);
+                            {
+                                <a class="nav-link navLink" asp-area="" asp-controller="Spedizione" asp-action="Index" asp-route-id="@id">Le tue spedizioni</a>
+                            }
+                        } else
+                        {
+                            <a class="nav-link navLink" asp-area="" asp-controller="Spedizione" asp-action="Index" asp-route-id="-1">Le tue spedizioni</a>
+                        }
+                    }
                 </div>
             </div>
         </nav>
@@ -63,7 +83,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>   
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

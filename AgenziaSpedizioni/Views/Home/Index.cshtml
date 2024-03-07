@@ -1,8 +1,132 @@
-﻿@{
+﻿@using System.Security.Claims
+@model AgenziaSpedizioni.Models.Search
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4 mb-5">
+        Welcome
+        @{
+            @if (User.Identity.IsAuthenticated)
+            {
+                var name = User.FindFirst(ClaimTypes.Name).Value;
+                {
+                    <strong>@name</strong>
+                }
+            }
+        }
+    </h1>
+    <div class="row d-flex justify-content-center mb-5">
+        <div class="col-md-4">
+            <h3>Traccia il tuo pacco</h3>
+            <form asp-action="Search" class="mb-3">
+                <label asp-for="IdSpedizione" class="control-label">Codice spedizione</label>
+                <input asp-for="IdSpedizione" class="form-control" />
+                <label asp-for="Identificativo" class="control-label">Identificativo (Codice Fiscale o Partita IVA)</label>
+                <input asp-for="Identificativo" class="form-control mb-3" />
+                <div class="form-group">
+                    <input type="submit" value="Search" class="btn btn-primary" />
+                </div>
+            </form>
+
+            @if (TempData["messageError"] != null)
+            {
+                <div class="bg-danger rounded py-2">
+                    <p class="text-white mb-0">@TempData["messageError"]</p>
+                </div>
+            }
+        </div>
+
+        @if(User.IsInRole("Admin"))
+        {
+            <div class="mt-5 mb-4">
+                <h4>Consegne previste per oggi</h4>
+                <table id="fetchOggi" class="table">
+                    <tr>
+                        <th>Codice Spedizione</th>
+                        <th>Data Spedizione</th>
+                        <th>Data Consegna Prevista</th>
+                        <th>Città Destinataria</th>
+                        <th>Indirizzo</th>
+                        <th>Peso</th>
+                        <th>Costo Spedizione</th>
+                    </tr>
+                </table>
+            </div>
+            <div id="fetchInConsegna" class="mb-4">
+                <h4>Totale spedizioni da consegnare</h4>
+            </div>
+            <div class="d-flex flex-column align-items-center mb-4">
+                <h4>Totale spedizioni raggruppate per città</h4>
+                <table id="fetchSpedizioniCitta" class="table w-50">
+                    <tr>
+                        <th>Città</th>
+                        <th>N. Spedizioni</th>
+                    </tr>
+                </table>
+            </div>
+        }
+    </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        async function FetchOggi() {
+            try {
+                const response = await fetch('/Home/FetchOggi');
+                const data = await response.json();
+                data.forEach(item => {
+                    $("#fetchOggi").append(`           
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.dataSpedizione}</td>
+                            <td>${item.dataConsegnaPrevista}</td>
+                            <td>${item.cittaDestinataria}</td>
+                            <td>${item.indirizzo}</td>
+                            <td>${item.peso} kg</td>
+                            <td>${item.costoSpedizione} €</td>
+                        </tr>                    
+                    `)
+                });
+                
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function FetchInConsegna() {
+            try {
+                const response = await fetch('/Home/FetchInConsegna');
+                const data = await response.json();
+                $("#fetchInConsegna").append(`
+                        <p>${data}</p>
+                    `)
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function FetchPerDestinazione() {
+            try {
+                const response = await fetch('/Home/FetchPerDestinazione');
+                const data = await response.json();
+                data.forEach(item => {
+                    $("#fetchSpedizioniCitta").append(`
+                            <tr>
+                                <td>${item.destinazione}</td>
+                                <td>${item.numeroSpedizioni}</td>
+                            </tr>
+                        `)
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        FetchOggi();
+        FetchInConsegna();
+        FetchPerDestinazione();
+    });
+</script>

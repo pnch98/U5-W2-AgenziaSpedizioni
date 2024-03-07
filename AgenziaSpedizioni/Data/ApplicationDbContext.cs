@@ -17,6 +17,11 @@ namespace Spedizioni.Data
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
+            modelBuilder.Entity<Spedizione>()
+                .Property(s => s.CostoSpedizione)
+                .HasColumnType("decimal(18, 2)");
         }
+        public DbSet<AgenziaSpedizioni.Models.Spedizione> Spedizioni { get; set; } = default!;
+        public DbSet<AgenziaSpedizioni.Models.DettagliSpedizione> DettagliSpedizioni { get; set; } = default!;
     }
 }

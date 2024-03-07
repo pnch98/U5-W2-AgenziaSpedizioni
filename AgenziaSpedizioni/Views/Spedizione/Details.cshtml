@@ -1,0 +1,92 @@
+﻿@using System.Security.Claims
+@model IEnumerable<AgenziaSpedizioni.Models.DettagliSpedizione>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Dettagli spedizione</h1>
+
+<table class="table bg-light mb-5">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Data di spedizione
+            </th>
+            <th>
+                Data consegna prevista
+            </th>
+            <th>
+                Peso
+            </th>
+            <th>
+                Citta destinataria
+            </th>
+            <th>
+                Indirizzo
+            </th>
+            <th>
+                Costo di spedizione
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @ViewBag.spedizione.Id
+            </td>
+            <td>
+                @ViewBag.spedizione.DataSpedizione
+            </td>
+            <td>
+                @ViewBag.spedizione.DataConsegnaPrevista
+            </td>
+            <td>
+                @ViewBag.spedizione.Peso kg
+            </td>
+            <td>
+                @ViewBag.spedizione.CittaDestinataria
+            </td>
+            <td>
+                @ViewBag.spedizione.Indirizzo
+            </td>
+            <td>
+                @ViewBag.spedizione.CostoSpedizione €
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<div class="d-flex align-items-center justify-content-between mb-3"> 
+<h3 class="me-3">Aggiornamenti</h3>
+@{
+    if(User.IsInRole("Admin"))
+    {
+        <p class="mb-0">
+            <a asp-action="CreateDetails" asp-route-id="@ViewBag.spedizione.Id">Aggiungi un aggiornamento</a>
+        </p>
+    }
+}
+</div>
+
+<div class="container d-flex flex-column">
+
+        @foreach (var item in Model)
+        {
+            <div class="row row-cols-3 w-50 bg-light border border-1 border-dark pb-2 mb-1">
+                <div class="col">
+                    -@Html.DisplayFor(modelItem => item.dataUpdate)
+                </div>
+                <div class="col">
+                    Luogo: @Html.DisplayFor(modelItem => item.CittaAttuale)
+                </div>
+            <div class="col">
+                    Stato: @Html.DisplayFor(modelItem => item.Stato)
+                </div>
+            </div>
+        }
+</div>

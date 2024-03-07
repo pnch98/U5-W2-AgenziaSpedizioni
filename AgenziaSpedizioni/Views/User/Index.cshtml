@@ -4,13 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="mb-5">Users</h1>
 
-<table class="table">
+<h3>Account privati</h3>
+<table class="table mb-3">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Identificativo)
+                Codice Fiscale
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Tipo)
@@ -22,22 +23,67 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Identificativo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+        @foreach (var item in Model)
+        {
+            if (item.Tipo == "Privato")
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Identificativo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-controller="Spedizione" asp-action="Index" asp-route-id="@item.Id">Spedizioni</a>
+                    </td>
+                </tr>
+            }
 }
+    </tbody>
+</table>
+
+<h3>Account aziendali</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Partita IVA
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.Tipo == "Azienda")
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Identificativo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-controller="Spedizione" asp-action="Index" asp-route-id="@item.Id">Spedizioni</a>
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>

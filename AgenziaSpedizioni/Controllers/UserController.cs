@@ -33,8 +33,16 @@ namespace AgenziaSpedizioni.Controllers
             user.Password = hashPassword;
             if (ModelState.IsValid)
             {
-                _db.Users.Add(user);
-                _db.SaveChanges();
+                try
+                {
+                    _db.Users.Add(user);
+                    _db.SaveChanges();
+                }
+                catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+                {
+                    ModelState.AddModelError("Username", "Username già in uso");
+                    return View();
+                }
                 TempData["success"] = "Registrazione avvenuta con successo!";
                 return RedirectToAction("Index");
             }
@@ -42,7 +50,7 @@ namespace AgenziaSpedizioni.Controllers
             return View();
         }
 
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int? id)
         {
             var user = _db.Users.Find(id);
@@ -57,7 +65,7 @@ namespace AgenziaSpedizioni.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(User user)
         {
             if (ModelState.IsValid)
@@ -71,7 +79,7 @@ namespace AgenziaSpedizioni.Controllers
             return View();
         }
 
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -91,7 +99,7 @@ namespace AgenziaSpedizioni.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeletePOST(int? id)
         {
             var user = _db.Users.Find(id);

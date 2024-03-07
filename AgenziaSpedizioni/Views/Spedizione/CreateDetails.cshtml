@@ -1,0 +1,54 @@
+﻿@model AgenziaSpedizioni.Models.DettagliSpedizione
+
+@{
+    ViewData["Title"] = "CreateDetails";
+}
+
+<h1>CreateDetails</h1>
+
+<h4>DettagliSpedizione</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateDetails">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="IdSpedizione" class="control-label"></label>
+                <input readonly asp-for="IdSpedizione" class="form-control" value="@TempData["idSpedizione"]" />
+                <span asp-validation-for="IdSpedizione" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Stato" class="control-label"></label>
+                <select asp-for="Stato" class="form-control">
+                    <option value="In transito">In transito</option>
+                    <option value="In consegna">In consegna</option>
+                    <option value="Consegnato">Consegnato</option>
+                    <option value="Non consegnato">Non consegnato</option>
+                </select>
+                <span asp-validation-for="Stato" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CittaAttuale" class="control-label"></label>
+                <input asp-for="CittaAttuale" class="form-control" />
+                <span asp-validation-for="CittaAttuale" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="dataUpdate" class="control-label"></label>
+                <input type="datetime-local" asp-for="dataUpdate" class="form-control" />
+                <span asp-validation-for="dataUpdate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Details" asp-route-id="@TempData["idSpedizione"]">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -39,7 +39,8 @@ namespace AgenziaSpedizioni.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.Role, user.Usertype)
+                    new Claim(ClaimTypes.Role, user.Usertype),
+                    new Claim(ClaimTypes.UserData, user.Id.ToString())
                 };
 
 

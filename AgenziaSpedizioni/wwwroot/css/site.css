@@ -18,5 +18,19 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #DECBB7;
+    color: #433633;
 }
+
+.navBg {
+    background-color: #433633;
+    color: #DECBB7;
+}
+
+.navLink {
+    color: #F7F0F5;
+}
+    .navLink:hover {
+        color: #DECBB7;
+    }
